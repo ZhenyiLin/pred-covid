@@ -61,7 +61,7 @@ After keeping subset fields, the dataset volume by level is as below:
 
 __Based on the storage volume, Level 1 data is used for prediction based on__
  - 240MB data volume
- - 1,024 locations
+ - 1,024 locations (after cleaning)
 
 ## Target Variables
 1.  `new_confirmed` outliers are removed
@@ -155,7 +155,7 @@ graph LR
 | Ensemble   |  Combine Rescusive and Rolling models
 
 Base Model
-$$\hat{y}_{t+1} = \hat{y}_{t+2} \cdots  = \hat{y}_{t+6} = y_t$$
+$\hat{y}_{t+1} = \hat{y}_{t+2} \cdots  = \hat{y}_{t+6} = y_t$
 
 Recursive Model
 $$

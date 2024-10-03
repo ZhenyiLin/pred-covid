@@ -102,7 +102,7 @@ __Based on the storage volume, Level 1 data is used for prediction based on__
     - **MALE**= $\sum_{i=1}^n\left|\log(1+\hat{y}_i) - \log(1+y_i)\right|$
     - penalize underestimation more than overestimation, since underestimating can have severe consequences
     - handle zero and small values well
-- Further Improve: Population Weighted MALE
+- Further Improve: Population Weighted MALE = 
   $${1\over \sum_l^L w_l} \sum_{l=1}^L w_l \left(\sum_{i=1}^n\left|\log(1+\hat{y}_i) - \log(1+y_i)\right| \right) $$
 
 
@@ -155,9 +155,7 @@ graph LR
 | Ensemble   |  Combine Rescusive and Rolling models
 
 ### Base Model
-$$
-\hat{y}_{t+1} = \hat{y}_{t+2} \cdots  = \hat{y}_{t+6} = y_t
-$$
+$$\hat{y}_{t+1} = \hat{y}_{t+2} \cdots  = \hat{y}_{t+6} = y_t$$
 
 ### Recursive Model
 $$

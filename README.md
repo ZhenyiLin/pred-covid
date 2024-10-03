@@ -155,42 +155,42 @@ graph LR
 | Ensemble   |  Combine Rescusive and Rolling models
 
 Base Model
-$\hat{y}_{t+1} = \hat{y}_{t+2} \cdots  = \hat{y}_{t+6} = y_t$
+    $$\hat{y}_{t+1} = \hat{y}_{t+2} \cdots  = \hat{y}_{t+6} = y_t$$
 
 Recursive Model
-$$
-\begin{align*}
-    \hat{y}_{t+1} &= F(y_t, y_{t-1}, y_{t-2} \cdots) \\
-    \hat{y}_{t+2} &= F(\hat{y}_{t+1}, y_t, y_{t-1} \cdots ) \\
-    \hat{y}_{t+3} &= F(\hat{y}_{t+2}, \hat{y}_{t+1}, y_t \cdots) \\
-    \vdots \\
-    \hat{y}_{t+7} &= F(\hat{y}_{t+6}, \hat{y}_{t+5}, \hat{y}_{t+4} \cdots)
-\end{align*}
-$$
+    $$
+    \begin{align*}
+        \hat{y}_{t+1} &= F(y_t, y_{t-1}, y_{t-2} \cdots) \\
+        \hat{y}_{t+2} &= F(\hat{y}_{t+1}, y_t, y_{t-1} \cdots ) \\
+        \hat{y}_{t+3} &= F(\hat{y}_{t+2}, \hat{y}_{t+1}, y_t \cdots) \\
+        \vdots \\
+        \hat{y}_{t+7} &= F(\hat{y}_{t+6}, \hat{y}_{t+5}, \hat{y}_{t+4} \cdots)
+    \end{align*}
+    $$
 
 
 
 Rolling Model
-$$
-\begin{align*}
-    \hat{y}_{t+1} &= F(y_{t-6}, y_{t-7}, y_{t-8} \cdots) \\
-    \hat{y}_{t+2} &= F(y_{t-5}, y_{t-6}, y_{t-7} \cdots ) \\
-    \hat{y}_{t+3} &= F(y_{t-4}, y_{t-5}, y_{t-6} \cdots) \\
-    \vdots \\
-    \hat{y}_{t+7} &= F(y_{t}, y_{t-1}, y_{t-2} \cdots)
-\end{align*}
-$$
+    $$
+    \begin{align*}
+        \hat{y}_{t+1} &= F(y_{t-6}, y_{t-7}, y_{t-8} \cdots) \\
+        \hat{y}_{t+2} &= F(y_{t-5}, y_{t-6}, y_{t-7} \cdots ) \\
+        \hat{y}_{t+3} &= F(y_{t-4}, y_{t-5}, y_{t-6} \cdots) \\
+        \vdots \\
+        \hat{y}_{t+7} &= F(y_{t}, y_{t-1}, y_{t-2} \cdots)
+    \end{align*}
+    $$
 
 Ensemble Model
-$$
-\begin{align*}
-    \hat{y}_{t+1} &= 0.8\cdot F_{\text{roll}, t+1} + 0.2\cdot  F_{\text{recursive}, t+1} \\
-    \hat{y}_{t+2} &= 0.4\cdot F_{\text{roll}, t+2} + 0.6\cdot F_{\text{recursive}, t+2} \\
-    \hat{y}_{t+3} &= 0.2\cdot F_{\text{roll}, t+3} + 0.8\cdot F_{\text{recursive}, t+3} \\
-    \vdots \\
-    \hat{y}_{t+7} &= 0.0\cdot F_{\text{roll}, t+7} + 1.0\cdot F_{\text{recursive}, t+7} \\
-\end{align*}
-$$
+    $$
+    \begin{align*}
+        \hat{y}_{t+1} &= 0.8\cdot F_{\text{roll}, t+1} + 0.2\cdot  F_{\text{recursive}, t+1} \\
+        \hat{y}_{t+2} &= 0.4\cdot F_{\text{roll}, t+2} + 0.6\cdot F_{\text{recursive}, t+2} \\
+        \hat{y}_{t+3} &= 0.2\cdot F_{\text{roll}, t+3} + 0.8\cdot F_{\text{recursive}, t+3} \\
+        \vdots \\
+        \hat{y}_{t+7} &= 0.0\cdot F_{\text{roll}, t+7} + 1.0\cdot F_{\text{recursive}, t+7} \\
+    \end{align*}
+    $$
 
 ## Overfitting
 1. Apply time series Cross Validation. Find the smallest CV mean score, with the smallest standard deviation

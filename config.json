@@ -1,0 +1,47 @@
+{
+    "pred_days": 7,
+    "pred_date": "2021-07-01",
+    "features": [
+        "loc_roll7_mean", "loc_roll14_mean", "loc_roll28_mean", "loc_roll56_mean", 
+        "loc_roll7_std", "loc_roll14_std", "loc_roll28_std", "loc_roll56_std", 
+        "location_duration_days",  "population", "weekday", "is_sunday",
+        "loc_lag0", "loc_lag1", "loc_lag2", "loc_lag3", "loc_lag4", "loc_lag5", "loc_lag6",
+        "new_vaccinated_rate", "cumsum_vaccinated_rate",
+        "loc_rain_roll7_sum", "loc_rain_roll14_sum", "loc_rain_roll28_sum", "loc_rain_roll56_sum",
+        "location_key_encoded", "latitude", "longitude", "relative_humidity",
+        "loc_same_weekday_roll2_mean", "loc_same_weekday_roll3_mean", "loc_same_weekday_roll4_mean",  "loc_same_weekday_roll5_mean",
+        "loc_same_weekday_roll6_mean", "loc_same_weekday_roll7_mean", "loc_same_weekday_roll8_mean",
+        "distance_from_city", "distance_from_cn_hb", 
+        "average_temperature_celsius", "temperature_roll7_mean", "temperature_roll14_mean", 
+        "temperature_roll28_mean", "temperature_roll56_mean",
+        "rh_roll7_mean", "rh_roll14_mean", "rh_roll28_mean", "rh_roll56_mean", 
+        "loc_roll7_mean_ratio", "temperature_roll7_mean_ratio", "rh_roll7_mean_ratio", 
+        "loc_roll14_mean_ratio", "temperature_roll14_mean_ratio", "rh_roll14_mean_ratio",
+        "loc_roll28_mean_ratio", "temperature_roll28_mean_ratio", "rh_roll28_mean_ratio", 
+        "loc_roll56_mean_ratio", "temperature_roll56_mean_ratio", "rh_roll56_mean_ratio"
+    ],
+    "recursive_model_features": [
+        "loc_roll7_mean", "loc_roll14_mean", "loc_roll28_mean", "loc_roll56_mean", 
+        "loc_roll7_std", "loc_roll14_std", "loc_roll28_std", "loc_roll56_std", 
+        "location_duration_days",  "population", "weekday", "is_sunday",
+        "loc_lag0", "loc_lag1", "loc_lag2", "loc_lag3", "loc_lag4", "loc_lag5", "loc_lag6",
+        "location_key_encoded", "latitude", "longitude",
+        "loc_same_weekday_roll2_mean", "loc_same_weekday_roll3_mean", "loc_same_weekday_roll4_mean",  "loc_same_weekday_roll5_mean",
+        "loc_same_weekday_roll6_mean", "loc_same_weekday_roll7_mean", "loc_same_weekday_roll8_mean",
+        "distance_from_city", "distance_from_cn_hb", 
+        "loc_roll7_mean_ratio", "loc_roll14_mean_ratio", "loc_roll28_mean_ratio", "loc_roll56_mean_ratio"
+    ],    
+    "lgb_params": {
+        "boosting_type": "gbdt",
+        "objective": "mae",
+        "subsample": 0.5,
+        "subsample_freq": 1,
+        "feature_fraction": 0.7,
+        "max_bin": 100,
+        "num_leaves": 255,
+        "min_data_in_leaf": 200,
+        "learning_rate": 0.02,
+        "max_depth": 8,
+        "verbose": -1
+    }
+} 

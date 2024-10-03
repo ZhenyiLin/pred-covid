@@ -154,10 +154,10 @@ graph LR
 | Rolling    |- predict values while maintaining a 7-day gap to allow rolling forecasts for 7 days ahead; <br> - the most valuable lastest 7-days data is exlucded in training, which may reduce the overall prediction accuracy
 | Ensemble   |  Combine Rescusive and Rolling models
 
-### Base Model
+Base Model
 $$\hat{y}_{t+1} = \hat{y}_{t+2} \cdots  = \hat{y}_{t+6} = y_t$$
 
-### Recursive Model
+Recursive Model
 $$
 \begin{align*}
     \hat{y}_{t+1} &= F(y_t, y_{t-1}, y_{t-2} \cdots) \\
@@ -170,7 +170,7 @@ $$
 
 
 
-### Rolling Model
+Rolling Model
 $$
 \begin{align*}
     \hat{y}_{t+1} &= F(y_{t-6}, y_{t-7}, y_{t-8} \cdots) \\
@@ -181,7 +181,7 @@ $$
 \end{align*}
 $$
 
-### Ensemble Model
+Ensemble Model
 $$
 \begin{align*}
     \hat{y}_{t+1} &= 0.8\cdot F_{\text{roll}, t+1} + 0.2\cdot  F_{\text{recursive}, t+1} \\

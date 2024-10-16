@@ -5,7 +5,8 @@ This is a project to predict COVID infection rate in the next 7 days
 1. `dockerfile` is used to build the docker
 2. the container includes following important functionalities:
     - jupyterlab
-    - deep learning `torch` + `gpu` support.
+    - deep learning `torch` + `cuda` support.
+    - lightgbm + `cuda` support
     - requirements, such as `pandas`, `numpy`, `matplotlib`, etc.
 
 <br>
@@ -61,12 +62,12 @@ After keeping subset fields, the dataset volume by level is as below:
 
 __Based on the storage volume, Level 1 data is used for prediction based on__
  - 240MB data volume
- - 1,024 locations (after cleaning)
+ - 1,024 locations
 
 ## Target Variables
 1.  `new_confirmed` outliers are removed
 2.  the new infection rate is computed using `new_confirmed / population`
-![alt text](image-4.png)
+![alt text](images/image-4.png)
 
 <br>
 
@@ -86,7 +87,7 @@ __Based on the storage volume, Level 1 data is used for prediction based on__
 
 
 ## Reference date for this demo
-![alt text](image-5.png)
+![alt text](images/image-5.png)
 * a reference date is the date to split time series train and split dataset
 * the reference date in this demo is `2022-07-01`
 * it gives enough history (up to `2021-06-30`) for training, and is able to do prediction starting from `2021-07-01`
@@ -102,8 +103,7 @@ __Based on the storage volume, Level 1 data is used for prediction based on__
     - **MALE**= $\sum_{i=1}^n\left|\log(1+\hat{y}_i) - \log(1+y_i)\right|$
     - penalize underestimation more than overestimation, since underestimating can have severe consequences
     - handle zero and small values well
-- Further Improve: Population Weighted MALE = 
-  $${1\over \sum_l^L w_l} \sum_{l=1}^L w_l \left(\sum_{i=1}^n\left|\log(1+\hat{y}_i) - \log(1+y_i)\right| \right) $$
+- Further Improve: Population Weighted MALE = ${1\over \sum_l^L w_l} \sum_{l=1}^L w_l \left(\sum_{i=1}^n\left|\log(1+\hat{y}_i) - \log(1+y_i)\right| \right)$
 
 
     ```mermaid
@@ -153,49 +153,52 @@ graph LR
 | Recursive  |- predict only the  next day, and then iteratively adds each prediction back into the training set for a total of 7 days. <br> - lose contextual information (weather, vaccine and other dataset) as iteration goes <br> - prediction decreases with each iteration.
 | Rolling    |- predict values while maintaining a 7-day gap to allow rolling forecasts for 7 days ahead; <br> - the most valuable lastest 7-days data is exlucded in training, which may reduce the overall prediction accuracy
 | Ensemble   |  Combine Rescusive and Rolling models
+![alt text](images/image-13.png)
+<!-- ### Base Model
+$$
+\hat{y}_{t+1} = \hat{y}_{t+2} \cdots  = \hat{y}_{t+6} = y_t
+$$
 
-Base Model
-    $$\hat{y}_{t+1} = \hat{y}_{t+2} \cdots  = \hat{y}_{t+6} = y_t$$
-
-Recursive Model
-    $$
-    \begin{align*}
-        \hat{y}_{t+1} &= F(y_t, y_{t-1}, y_{t-2} \cdots) \\
-        \hat{y}_{t+2} &= F(\hat{y}_{t+1}, y_t, y_{t-1} \cdots ) \\
-        \hat{y}_{t+3} &= F(\hat{y}_{t+2}, \hat{y}_{t+1}, y_t \cdots) \\
-        \vdots \\
-        \hat{y}_{t+7} &= F(\hat{y}_{t+6}, \hat{y}_{t+5}, \hat{y}_{t+4} \cdots)
-    \end{align*}
-    $$
+### Recursive Model
+$$
+\begin{align*}
+    \hat{y}_{t+1} &= F(y_t, y_{t-1}, y_{t-2} \cdots) \\
+    \hat{y}_{t+2} &= F(\hat{y}_{t+1}, y_t, y_{t-1} \cdots ) \\
+    \hat{y}_{t+3} &= F(\hat{y}_{t+2}, \hat{y}_{t+1}, y_t \cdots) \\
+    \vdots \\
+    \hat{y}_{t+7} &= F(\hat{y}_{t+6}, \hat{y}_{t+5}, \hat{y}_{t+4} \cdots)
+\end{align*}
+$$
 
 
 
-Rolling Model
-    $$
-    \begin{align*}
-        \hat{y}_{t+1} &= F(y_{t-6}, y_{t-7}, y_{t-8} \cdots) \\
-        \hat{y}_{t+2} &= F(y_{t-5}, y_{t-6}, y_{t-7} \cdots ) \\
-        \hat{y}_{t+3} &= F(y_{t-4}, y_{t-5}, y_{t-6} \cdots) \\
-        \vdots \\
-        \hat{y}_{t+7} &= F(y_{t}, y_{t-1}, y_{t-2} \cdots)
-    \end{align*}
-    $$
 
-Ensemble Model
-    $$
-    \begin{align*}
-        \hat{y}_{t+1} &= 0.8\cdot F_{\text{roll}, t+1} + 0.2\cdot  F_{\text{recursive}, t+1} \\
-        \hat{y}_{t+2} &= 0.4\cdot F_{\text{roll}, t+2} + 0.6\cdot F_{\text{recursive}, t+2} \\
-        \hat{y}_{t+3} &= 0.2\cdot F_{\text{roll}, t+3} + 0.8\cdot F_{\text{recursive}, t+3} \\
-        \vdots \\
-        \hat{y}_{t+7} &= 0.0\cdot F_{\text{roll}, t+7} + 1.0\cdot F_{\text{recursive}, t+7} \\
-    \end{align*}
-    $$
+### Rolling Model
+$$
+\begin{align*}
+    \hat{y}_{t+1} &= F(y_{t-6}, y_{t-7}, y_{t-8} \cdots) \\
+    \hat{y}_{t+2} &= F(y_{t-5}, y_{t-6}, y_{t-7} \cdots ) \\
+    \hat{y}_{t+3} &= F(y_{t-4}, y_{t-5}, y_{t-6} \cdots) \\
+    \vdots \\
+    \hat{y}_{t+7} &= F(y_{t}, y_{t-1}, y_{t-2} \cdots)
+\end{align*}
+$$
+
+### Ensemble Model
+$$
+\begin{align*}
+    \hat{y}_{t+1} &= 0.8\cdot F_{\text{roll}, t+1} + 0.2\cdot  F_{\text{recursive}, t+1} \\
+    \hat{y}_{t+2} &= 0.4\cdot F_{\text{roll}, t+2} + 0.6\cdot F_{\text{recursive}, t+2} \\
+    \hat{y}_{t+3} &= 0.2\cdot F_{\text{roll}, t+3} + 0.8\cdot F_{\text{recursive}, t+3} \\
+    \vdots \\
+    \hat{y}_{t+7} &= 0.0\cdot F_{\text{roll}, t+7} + 1.0\cdot F_{\text{recursive}, t+7} \\
+\end{align*}
+$$ -->
 
 ## Overfitting
 1. Apply time series Cross Validation. Find the smallest CV mean score, with the smallest standard deviation
 
-    ![alt text](image-6.png)
+    ![alt text](images/image-6.png)
 2. Cross Validation Tuning 
    1. Round 1: Train model using all features
    2. Round 2: Keep top N features that explains X% of total feature importance; the best threshold X is obtained from the CV score and std. This is better than hardcode for top N features
@@ -242,13 +245,15 @@ Ensemble Model
 
 Why ensemble work?
 
-![alt text](image-7.png)
-![alt text](image-9.png)
-![alt text](image-10.png)
+![alt text](images/image-7.png)
+
+The performance<br>
+![alt text](images/image-11.png)
+![alt text](images/image-12.png)
 
 ## Feature Importance Analysis
 Take the rolling model as an example:
-![alt text](image-8.png)
+![alt text](images/image-8.png)
 
 
 

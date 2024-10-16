@@ -153,7 +153,9 @@ graph LR
 | Recursive  |- predict only the  next day, and then iteratively adds each prediction back into the training set for a total of 7 days. <br> - lose contextual information (weather, vaccine and other dataset) as iteration goes <br> - prediction decreases with each iteration.
 | Rolling    |- predict values while maintaining a 7-day gap to allow rolling forecasts for 7 days ahead; <br> - the most valuable lastest 7-days data is exlucded in training, which may reduce the overall prediction accuracy
 | Ensemble   |  Combine Rescusive and Rolling models
-![alt text](images/image-13.png)
+
+<img src="images/image-13.png" alt="alt text" width="700"/>
+
 <!-- ### Base Model
 $$
 \hat{y}_{t+1} = \hat{y}_{t+2} \cdots  = \hat{y}_{t+6} = y_t

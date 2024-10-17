@@ -42,6 +42,7 @@
         "min_data_in_leaf": 200,
         "learning_rate": 0.02,
         "max_depth": 8,
-        "verbose": -1
+        "verbose": -1,
+        "device": "cuda"
     }
 } 

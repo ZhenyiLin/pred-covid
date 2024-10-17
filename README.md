@@ -6,9 +6,8 @@ This is a project to predict COVID infection rate in the next 7 days
 2. the container includes following important functionalities:
     - jupyterlab
     - deep learning `torch` + `cuda` support.
-    - lightgbm + `cuda` support
+    - lightgbm + `cuda` support (story: https://github.com/microsoft/LightGBM/issues/6665)
     - requirements, such as `pandas`, `numpy`, `matplotlib`, etc.
-
 <br>
 
 

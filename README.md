@@ -126,15 +126,16 @@ The features are built based on the ideas as below
 graph LR
     0[province or country level] -->1[infection feature]
     1 --avg, std, min, max --> 1a[roll by 7, 14, 28 ... days] 
-    1 --> 1c[lag by 7, 14, 28 ... days]
-    1 --> 1d[lag same weekday by 2, 3, 4, ... days]
+    1 --> 1c[lag by 0, 1, 2, 3, 4 ... days]
+    1 --avg, std, min, max --> 1d[roll same weekday by 2, 3, 4, ... days]
     0 -->2[date feature] -- current date - first infection date --> 2a[covid duration days] 
     2 --"Mon: 0, Tues: 1, Wed: 2, etc."--> 2b[weekday]
+    2 --"day of the year" --> 2c[day number]
     0 -->3[weather] --> 3a[rain / snow] --avg, std, min, max --> 2aa[roll by 7, 14, 28 ... days]
     3 -- avg / min / max --> 3b[temperature] --avg, std, min, max --> 3bb[roll by 7, 14, 28 ... days]
     3 --> 3c[relative humidity] --avg, std, min, max --> 3cc[roll by 7, 14, 28 ... days]
-    0 --> 4[demo] --> 4a[population] -- not used too many missing --> 4aa[population by ages]
-    4 --min--> 4b[distance to multiple big cities]
+    0 --> 4[demographic] --> 4a[population] -- not used too many missing --> 4aa[population by ages]
+    4 --min--> 4b[distance to closest big cities]
     4 --min--> 4c[distance to china hu bei]
     0 --> 5[vaccinated feature] -- cumsum --> 5a[vaccinated rate]
     0 --> 6[ratio feature] --> 6a[rain / rain roll value]
@@ -200,7 +201,9 @@ $$ -->
 1. Apply time series Cross Validation. Find the smallest CV mean score, with the smallest standard deviation
 
     ![alt text](images/image-6.png)
-2. Cross Validation Tuning 
+2. Hyper-parameter Tuning 
+   
+   Demo 1 hyper parameter: top X% of the top feature importance
    1. Round 1: Train model using all features
    2. Round 2: Keep top N features that explains X% of total feature importance; the best threshold X is obtained from the CV score and std. This is better than hardcode for top N features
    
